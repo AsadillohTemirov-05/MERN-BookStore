@@ -1,0 +1,34 @@
+name: Deploy to EC2 Production # Ish jarayonining nomi
+
+on:
+  push: # Kod qachon deploy bo'lishini belgilaydi
+    branches:
+      - main # 'main' branchga kod push qilinganda ishga tushadi. Agar sizda 'master' branchidan foydalansangiz, 'main' o'rniga 'master' yozing.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Ishni bajaradigan virtual mashina turi (GitHub tomonidan ta'minlanadi)
+    steps:
+      - name: Checkout code # Repozitoriy kodini GitHub Actionsga tortish
+        uses: actions/checkout@v2 # Repozitoriy fayllarini Actions muhitiga yuklaydi
+
+      - name: Set up SSH agent # Serverga ulanish uchun SSH agentni sozlash
+        uses: webfactory/ssh-agent@v0.5.3 # Bu Action SSH private kalitdan foydalanadi
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # GitHub Secret'dan private kalitni oladi
+
+      - name: Deploy project to EC2 # Serverga SSH orqali ulanish va deploy scriptini ishga tushirish
+        run: |
+          # SSH orqali serverga ulanish
+          # -o StrictHostKeyChecking=no: Birinchi ulanishda host kalitini tekshirmaydi (avtomatizatsiya uchun qulay, lekin diqqatli bo'ling)
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} '
+            # Serverga ulanishdan keyin bajariladigan buyruqlar
+            # Loyiha papkasiga o'tish
+            cd /home/ubuntu/MERN-BookStore/ || { echo "Xato: Serverdagi loyiha katalogi topilmadi!"; exit 1; }
+
+            # Serverdagi Git repozitoriysini yangilash (deploy.sh ichida ham bor, lekin bu zaxira va ma'lumotni yangilaydi)
+            git pull origin main # Yoki sizning asosiy branch nomingiz
+
+            # Deploy scriptini ishga tushirish
+            /bin/bash deploy.sh
+          '
