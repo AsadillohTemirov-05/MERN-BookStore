@@ -2,19 +2,18 @@
 
 # Log fayli yo'li
 LOG_FILE="/var/log/deploy.log"
-# Barcha chiqishlarni (stdout va stderr) log fayliga va terminalga yozish
+
 exec > >(tee -a ${LOG_FILE}) 2>&1
 
 echo "--------------------------------------------------------"
 echo "Deploy boshlandi: $(date)"
 echo "--------------------------------------------------------"
 
-# Asosiy loyiha katalogiga o'tish
-# MERN-BookStore - bu sizning asosiy loyiha papkangiz nomi
-cd /home/ubuntu/MERN-BookStore || { echo "Xato: Loyiha katalogi topilmadi!"; exit 1; }
+
+cd /home/ubuntu/MERN-BookStore/
 
 echo "--- Loyiha fayllarini Gitdan tortish ---"
-git pull origin main # Yoki sizning asosiy branch nomingiz (masalan, master)
+git pull origin main 
 
 echo "--- Backend (Node.js) yangilash ---"
 cd backend || { echo "Xato: Backend katalogi topilmadi!"; exit 1; }
