@@ -27,8 +27,6 @@ echo "--- Frontend (React) yangilash ---"
 cd frontend || { echo "Xato: Frontend katalogi topilmadi!"; exit 1; }
 npm install # Yangi dependensiyalar uchun
 NODE_OPTIONS="--max-old-space-size=4096" npm run build # Frontendni build qilish
-# Agar sizning build jarayoningizda index.html boshqa joyga tushsa, uni dist ichiga ko'chirish kerak bo'lishi mumkin.
-# Masalan: mv build/* dist/ (agar build papkasi ichidagilar dist ga ko'chirilishi kerak bo'lsa)
 cd .. # Asosiy loyiha katalogiga qaytish
 
 echo "--- Admin panel (React) yangilash ---"
