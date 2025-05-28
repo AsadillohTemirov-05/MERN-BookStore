@@ -10,7 +10,7 @@ echo "Deploy boshlandi: $(date)"
 echo "--------------------------------------------------------"
 
 
-cd /home/ubuntu/MERN-BookStore/
+cd home/ubuntu/MERN-BookStore/
 
 echo "--- Loyiha fayllarini Gitdan tortish ---"
 git pull origin main 
